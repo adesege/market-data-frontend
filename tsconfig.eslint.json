@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowJs": false,
+    "checkJs": false
+  },
+  "include": [
+    "src/**/*.tsx",
+    "*.ts",
+    "*.js",
+    ".eslintrc.js"
+  ]
+}
