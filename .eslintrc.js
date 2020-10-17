@@ -22,5 +22,9 @@ module.exports = {
     '@typescript-eslint',
   ],
   rules: {
+    'no-param-reassign': 0,
+    'react/jsx-props-no-spreading': 0,
+    'react/destructuring-assignment': 0,
+    'react/button-has-type': 0,
   },
 };

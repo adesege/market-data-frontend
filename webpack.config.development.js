@@ -3,7 +3,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
-
 const path = require('path');
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -50,10 +49,11 @@ module.exports = {
         ],
       },
       {
-        test: /\.scss$/i,
+        test: /\.s?css$/i,
         use: [
           isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
+          'postcss-loader',
           'sass-loader',
         ],
       }],

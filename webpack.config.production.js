@@ -27,8 +27,6 @@ const plugins = [
   }),
   new ForkTsCheckerWebpackPlugin({
     async: false,
-    useTypescriptIncrementalApi: true,
-    memoryLimit: 4096,
   }),
 ];
 
@@ -61,10 +59,11 @@ module.exports = {
         ],
       },
       {
-        test: /\.scss$/i,
+        test: /\.s?css$/i,
         use: [
           isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
+          'postcss-loader',
           'sass-loader',
         ],
       }],

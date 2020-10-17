@@ -16,7 +16,8 @@
     ],
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
-    "allowJs": true
+    "allowJs": true,
+    "baseUrl": "./src"
   },
   "include": [
     "src/**/*.tsx",
