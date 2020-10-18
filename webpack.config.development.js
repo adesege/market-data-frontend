@@ -3,29 +3,11 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
+const webpack = require('webpack');
 const path = require('path');
+const dotenv = require('dotenv').config();
 
 const isDev = process.env.NODE_ENV !== 'production';
-
-const plugins = [
-  new HtmlWebPackPlugin({
-    template: './public/index.html',
-    filename: './index.html',
-    hash: true,
-    inject: true,
-  }),
-  new ForkTsCheckerWebpackPlugin({
-    eslint: { files: '.eslintrc.js' },
-  }),
-  new ForkTsCheckerNotifierWebpackPlugin({ title: 'TypeScript', excludeWarnings: false }),
-];
-
-if (!isDev) {
-  plugins.push(new MiniCssExtractPlugin({
-    filename: isDev ? '[name].css' : '[name].[contenthash].css',
-    chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
-  }));
-}
 
 module.exports = {
   context: process.cwd(),
@@ -64,7 +46,24 @@ module.exports = {
     port: 9000,
     historyApiFallback: true,
   },
-  plugins,
+  plugins: [
+    new HtmlWebPackPlugin({
+      template: './public/index.html',
+      filename: './index.html',
+      hash: true,
+      inject: true,
+    }),
+    new ForkTsCheckerWebpackPlugin({
+      eslint: { files: '.eslintrc.js' },
+    }),
+    new ForkTsCheckerNotifierWebpackPlugin({ title: 'TypeScript', excludeWarnings: false }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(dotenv.parsed),
+    }),
+    new MiniCssExtractPlugin({
+      filename: isDev ? '[name].css' : '[name].[contenthash].css',
+      chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
+    })],
   optimization: {
     runtimeChunk: 'single',
     moduleIds: 'deterministic',

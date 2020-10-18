@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 type IInputProps = React.InputHTMLAttributes<HTMLInputElement> & { label: string };
-const Input = (props: IInputProps) => (
+const AppInput = (props: IInputProps) => (
   <div className="mb-4">
     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={props.id}>
       {props.label}
@@ -10,4 +10,4 @@ const Input = (props: IInputProps) => (
   </div>
 );
 
-export default Input;
+export default AppInput;
