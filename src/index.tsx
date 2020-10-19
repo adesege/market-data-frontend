@@ -37,7 +37,8 @@ if (getAuthToken()) {
   }));
 }
 
-const AdminDashboard = React.lazy(() => import(/* webpackChunkName: "layouts/admin-dashboard" */ './layouts/AdminDashboard'));
+const DefaultLayout = React.lazy(() => import(/* webpackChunkName: "layouts/default-layout" */ './layouts/DefaultLayout'));
+const AdminDashboardLayout = React.lazy(() => import(/* webpackChunkName: "layouts/admin-dashboard" */ './layouts/AdminDashboardLayout'));
 const ManageMarket = React.lazy(() => import(/* webpackChunkName: "pages/dashboard/markets/manage" */ './pages/Dashboard/Markets/Manage'));
 const Markets = React.lazy(() => import(/* webpackChunkName: "pages/dashboard/markets" */ './pages/Dashboard/Markets'));
 const Login = React.lazy(() => import(/* webpackChunkName: "pages/login" */ './pages/Login'));
@@ -52,7 +53,7 @@ const App = () => (
             <Route
               exact
               path={IRoute.main}
-              component={Main}
+              render={() => <DefaultLayout component={Main} />}
             />
             <Route
               exact
@@ -62,17 +63,17 @@ const App = () => (
             <Route
               exact
               path={IRoute.addMarket}
-              render={() => <AdminDashboard component={ManageMarket} />}
+              render={() => <AdminDashboardLayout component={ManageMarket} />}
             />
             <Route
               exact
               path={IRoute.editMarket}
-              render={() => <AdminDashboard component={ManageMarket} />}
+              render={() => <AdminDashboardLayout component={ManageMarket} />}
             />
             <Route
               exact
               path={IRoute.market}
-              render={() => <AdminDashboard component={Markets} />}
+              render={() => <AdminDashboardLayout component={Markets} />}
             />
           </Switch>
         </React.Suspense>

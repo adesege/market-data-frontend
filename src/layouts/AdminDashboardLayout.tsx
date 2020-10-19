@@ -6,12 +6,11 @@ import { IFlashTypes } from '../interfaces/flash';
 import { IRoute } from '../interfaces/route';
 import { AppDispatch, RootState } from '../store';
 import { showFlash } from '../store/flash';
+import DefaultLayout from './DefaultLayout';
 
 const AdminDashboard = (props: { component: React.FC<AuthState> }) => {
-  const Component = props.component;
   const authState = useSelector<RootState, AuthState>((state) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
-
   if (!authState.isAuthenticated) {
     return <Redirect to={IRoute.login} />;
   }
@@ -24,16 +23,7 @@ const AdminDashboard = (props: { component: React.FC<AuthState> }) => {
     return <Redirect to={IRoute.main} />;
   }
 
-  return (
-    <>
-      <header className="bg-blue-900 text-white px-10 py-5 w-full absolute">
-        <span className="font-bold">Market Data</span>
-      </header>
-      <main className="container h-full px-4 pt-20">
-        <Component {...authState} />
-      </main>
-    </>
-  );
+  return <DefaultLayout component={props.component} />;
 };
 
 export default AdminDashboard;
