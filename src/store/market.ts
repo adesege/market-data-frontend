@@ -28,6 +28,12 @@ const marketSlice = createSlice({
       }
       state.market = action.payload;
     },
+    removeMarket(state: MarketState, action: PayloadAction<string>) {
+      const index = state.markets.findIndex((item) => item.id === action.payload);
+      if (index > -1) {
+        state.markets.splice(index, 1);
+      }
+    },
     setMarkets(state: MarketState, action: PayloadAction<ICreateMarket[]>) {
       state.markets = action.payload;
     },
@@ -35,7 +41,11 @@ const marketSlice = createSlice({
 });
 
 const {
-  addMarket, setMarket, setMarkets, updateMarket,
+  addMarket,
+  setMarket,
+  setMarkets,
+  updateMarket,
+  removeMarket,
 } = marketSlice.actions;
 
 export const createMarket = (formData: ICreateMarket) => async (
@@ -64,6 +74,13 @@ export const getMarket = (marketId: string) => async (
 ) => {
   const { data } = await axios.get<ICreateMarket>(`/markets/${marketId}`);
   dispatch(setMarket(data));
+};
+
+export const deleteMarket = (marketId: string) => async (
+  dispatch: Dispatch<PayloadAction<string>>,
+) => {
+  await axios.delete(`/markets/${marketId}`);
+  dispatch(removeMarket(marketId));
 };
 
 export default marketSlice.reducer;

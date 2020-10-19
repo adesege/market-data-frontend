@@ -3,16 +3,62 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AppButton from '../../../components/AppButton';
 import AppFlash from '../../../components/AppFlash';
-import { MarketState } from '../../../interfaces/market';
+import { ICreateMarket, MarketState } from '../../../interfaces/market';
 import { IRoute } from '../../../interfaces/route';
 import { AppDispatch, RootState } from '../../../store';
-import { getMarkets } from '../../../store/market';
+import { deleteMarket, getMarkets } from '../../../store/market';
+
+interface IDeleteAlertProps {
+  market: ICreateMarket;
+  onToggleDeleteMessage: (market: ICreateMarket, state: boolean) => void
+}
+
+const DeleteAlert = (props: IDeleteAlertProps) => {
+  const [isDeletingMarket, setIsDeletingMarket] = React.useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const onDelete = async () => {
+    try {
+      setIsDeletingMarket(true);
+      await dispatch(deleteMarket(props.market.id));
+      setIsDeletingMarket(false);
+
+      props.onToggleDeleteMessage(null, false);
+    } catch (error) {
+      setIsDeletingMarket(false);
+    }
+  };
+
+  return (
+    <div role="alert" className="mb-5">
+      <div className="bg-red-500 text-white font-bold rounded-t px-4 py-2">
+        Danger
+      </div>
+      <div className="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
+        <p className="mb-5">
+          Are you sure you want to delete
+          {' '}
+          {props.market.name}
+          {' '}
+          market? This action cannot be undone.
+        </p>
+        <AppButton disabled={isDeletingMarket} onClick={onDelete} className="bg-red-700 text-white mr-3">Yes, delete</AppButton>
+        <AppButton onClick={() => props.onToggleDeleteMessage(null, false)} className="bg-green-700 text-white">No, cancel</AppButton>
+      </div>
+    </div>
+  );
+};
 
 const Markets = () => {
+  const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
+  const [selectedMarket, setSelectedMarket] = React.useState<ICreateMarket>();
   const marketsState = useSelector<RootState, MarketState>((state) => state.market);
   const dispatch = useDispatch<AppDispatch>();
 
-  const onDelete = (): null => null;
+  const onToggleDeleteMessage = (market: ICreateMarket, state: boolean): void => {
+    setSelectedMarket(market);
+    setShowDeleteAlert(state);
+  };
 
   React.useEffect(() => {
     dispatch(getMarkets());
@@ -26,6 +72,13 @@ const Markets = () => {
         <Link to={IRoute.addMarket} className="text-blue-600">Add a new market</Link>
       </div>
       <AppFlash className="mb-5" />
+      {showDeleteAlert
+        && (
+          <DeleteAlert
+            market={selectedMarket}
+            onToggleDeleteMessage={onToggleDeleteMessage}
+          />
+        )}
       <table className="table-fixed">
         <thead>
           <tr>
@@ -42,8 +95,13 @@ const Markets = () => {
               <td className="border px-4 py-2">{market.category}</td>
               <td className="border px-4 py-2">{market.address}</td>
               <td className="border px-4 py-2">
-                <Link to={`${IRoute.market}/${market.id}`} className="bg-blue-600 text-white py-1 px-2 rounded inline-block mr-1">Edit</Link>
-                <AppButton className="bg-red-700 text-white  py-1 px-2 h-auto" onClick={onDelete}>Delete</AppButton>
+                <Link
+                  to={`${IRoute.market}/${market.id}`}
+                  className="bg-blue-600 text-white py-1 px-2 rounded inline-block mr-1"
+                >
+                  Edit
+                </Link>
+                <AppButton className="bg-red-700 text-white  py-1 px-2 h-auto" onClick={() => onToggleDeleteMessage(market, true)}>Delete</AppButton>
               </td>
             </tr>
           ))}

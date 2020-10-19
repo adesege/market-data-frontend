@@ -9,7 +9,7 @@ import { ISelectOption } from '../../../interfaces/app-select';
 import { IFlashTypes } from '../../../interfaces/flash';
 import { ICreateMarket, MarketState } from '../../../interfaces/market';
 import { IRoute } from '../../../interfaces/route';
-import { RootState } from '../../../store';
+import { AppDispatch, RootState } from '../../../store';
 import { showFlash } from '../../../store/flash';
 import { createMarket, editMarket, getMarket } from '../../../store/market';
 
@@ -46,7 +46,7 @@ const ManageMarket = () => {
   });
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const history = useHistory();
   const params = useParams<{ id: string }>();
   const market = useSelector<RootState, MarketState>((state) => state.market);

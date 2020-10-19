@@ -4,13 +4,13 @@ import { Redirect } from 'react-router-dom';
 import { AuthState, IRoles } from '../interfaces/auth';
 import { IFlashTypes } from '../interfaces/flash';
 import { IRoute } from '../interfaces/route';
-import { RootState } from '../store';
+import { AppDispatch, RootState } from '../store';
 import { showFlash } from '../store/flash';
 
 const AdminDashboard = (props: { component: React.FC<AuthState> }) => {
   const Component = props.component;
   const authState = useSelector<RootState, AuthState>((state) => state.auth);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   if (!authState.isAuthenticated) {
     return <Redirect to={IRoute.login} />;

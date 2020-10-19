@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { RootState } from 'store';
 import AppButton from '../components/AppButton';
 import AppFlash from '../components/AppFlash';
 import AppInput from '../components/AppInput';
 import { AuthState, ILoginState } from '../interfaces/auth';
 import { IRoute } from '../interfaces/route';
+import { AppDispatch, RootState } from '../store';
 import { login } from '../store/auth';
 
 const Login = () => {
   const [formData, setFormData] = React.useState<ILoginState>({ email: '', password: '' });
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const authUser = useSelector<RootState, AuthState>((state) => state.auth);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
