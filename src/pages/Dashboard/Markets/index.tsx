@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import AppAlert from '../../../components/AppAlert';
 import AppButton from '../../../components/AppButton';
 import AppFlash from '../../../components/AppFlash';
+import { IFlashTypes } from '../../../interfaces/flash';
 import { ICreateMarket, MarketState } from '../../../interfaces/market';
 import { IRoute } from '../../../interfaces/route';
 import { AppDispatch, RootState } from '../../../store';
@@ -79,6 +81,7 @@ const Markets = () => {
             onToggleDeleteMessage={onToggleDeleteMessage}
           />
         )}
+
       <table className="table-fixed">
         <thead>
           <tr>
@@ -89,22 +92,34 @@ const Markets = () => {
           </tr>
         </thead>
         <tbody>
-          {marketsState.markets.map((market, index) => (
-            <tr key={market.id} className={(index + 1) % 2 === 0 ? 'bg-gray-100' : ''}>
-              <td className="border px-4 py-2">{market.name}</td>
-              <td className="border px-4 py-2">{market.category}</td>
-              <td className="border px-4 py-2">{market.address}</td>
-              <td className="border px-4 py-2">
-                <Link
-                  to={`${IRoute.market}/${market.id}`}
-                  className="bg-blue-600 text-white py-1 px-2 rounded inline-block mr-1"
-                >
-                  Edit
-                </Link>
-                <AppButton className="bg-red-700 text-white  py-1 px-2 h-auto" onClick={() => onToggleDeleteMessage(market, true)}>Delete</AppButton>
-              </td>
-            </tr>
-          ))}
+          {!marketsState.markets.length
+            ? (
+              <tr>
+                <td colSpan={4}>
+                  <AppAlert
+                    className="text-center"
+                    messages={['You haven\'t created any market yet']}
+                    type={IFlashTypes.info}
+                  />
+                </td>
+              </tr>
+            )
+            : marketsState.markets.map((market, index) => (
+              <tr key={market.id} className={(index + 1) % 2 === 0 ? 'bg-gray-100' : ''}>
+                <td className="border px-4 py-2">{market.name}</td>
+                <td className="border px-4 py-2">{market.category}</td>
+                <td className="border px-4 py-2">{market.address}</td>
+                <td className="border px-4 py-2">
+                  <Link
+                    to={`${IRoute.market}/${market.id}`}
+                    className="bg-blue-600 text-white py-1 px-2 rounded inline-block mr-1"
+                  >
+                    Edit
+                  </Link>
+                  <AppButton className="bg-red-700 text-white  py-1 px-2 h-auto" onClick={() => onToggleDeleteMessage(market, true)}>Delete</AppButton>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </section>
