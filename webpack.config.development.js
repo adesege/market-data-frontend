@@ -82,17 +82,6 @@ module.exports = {
           reuseExistingChunk: true,
           filename: 'commons/[name].[contenthash].js',
         },
-        pages: {
-          test(module) {
-            return module.resource
-              && module.resource.includes(`${path.sep}pages${path.sep}`);
-          },
-          name: 'pages',
-          chunks: 'all',
-          enforce: true,
-          reuseExistingChunk: true,
-          filename: 'pages/[name].[contenthash].js',
-        },
         vendors: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',

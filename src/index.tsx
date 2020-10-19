@@ -12,7 +12,6 @@ import './assets/css/styles.scss';
 import { AUTH_USER_PAYLOAD_KEY } from './constants';
 import { IFlashTypes } from './interfaces/flash';
 import { IRoute } from './interfaces/route';
-import Login from './pages/Login';
 import store from './store';
 import { logout, setCurrentUser } from './store/auth';
 import { showFlash } from './store/flash';
@@ -38,17 +37,40 @@ if (getAuthToken()) {
   }));
 }
 
+const AdminDashboard = React.lazy(() => import(/* webpackChunkName: "layouts/admin-dashboard" */ './layouts/AdminDashboard'));
+const AddMarket = React.lazy(() => import(/* webpackChunkName: "pages/dashboard/markets/add" */ './pages/Dashboard/Markets/Add'));
+const Markets = React.lazy(() => import(/* webpackChunkName: "pages/dashboard/markets" */ './pages/Dashboard/Markets'));
+const Login = React.lazy(() => import(/* webpackChunkName: "pages/login" */ './pages/Login'));
+const Main = React.lazy(() => import(/* webpackChunkName: "pages/main" */ './pages/Main'));
+
 const App = () => (
   <React.StrictMode>
     <Provider store={store}>
       <Router>
-        <Switch>
-          <Route
-            exact
-            path={IRoute.login}
-            component={Login}
-          />
-        </Switch>
+        <React.Suspense fallback={<div>Loading...</div>}>
+          <Switch>
+            <Route
+              exact
+              path={IRoute.main}
+              component={Main}
+            />
+            <Route
+              exact
+              path={IRoute.login}
+              component={Login}
+            />
+            <Route
+              exact
+              path={IRoute.addMarket}
+              render={() => <AdminDashboard component={AddMarket} />}
+            />
+            <Route
+              exact
+              path={IRoute.market}
+              render={() => <AdminDashboard component={Markets} />}
+            />
+          </Switch>
+        </React.Suspense>
       </Router>
     </Provider>
   </React.StrictMode>

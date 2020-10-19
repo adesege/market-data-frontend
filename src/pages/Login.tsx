@@ -32,7 +32,7 @@ const Login = () => {
   };
 
   if (authUser.isAuthenticated) {
-    return <Redirect to={IRoute.home} />;
+    return <Redirect to={IRoute.market} />;
   }
 
   return (
@@ -41,8 +41,8 @@ const Login = () => {
         <AppFlash className="mb-5" />
         <h1 className="text-4xl text-center mb-5">Login to your account</h1>
         <form onSubmit={onSubmit}>
-          <AppInput name="email" id="email" label="Email address" onChange={onChange} value={formData.email} required />
-          <AppInput name="password" id="password" label="Password" onChange={onChange} value={formData.password} required />
+          <AppInput name="email" type="email" id="email" label="Email address" onChange={onChange} value={formData.email} required />
+          <AppInput name="password" type="password" id="password" label="Password" onChange={onChange} value={formData.password} required />
           <AppButton disabled={isLoading} type="submit" className="bg-blue-900 text-white w-full">
             Login
           </AppButton>

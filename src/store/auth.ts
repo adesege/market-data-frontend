@@ -7,7 +7,7 @@ import setAuthorizationToken from '../utils/setAuthorizationToken';
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState: { user: {}, isAuthenticated: false } as AuthState,
+  initialState: { user: { roles: [] }, isAuthenticated: false } as AuthState,
   reducers: {
     setCurrentUser(state: AuthState, action: PayloadAction<ISetCurrentUser>) {
       state.user = action.payload.user;

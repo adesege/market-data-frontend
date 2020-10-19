@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from 'store';
 import { IFlashMessage, IFlashTypes } from '../interfaces/flash';
+import { RootState } from '../store';
 
 const AppFlash = (props: { className: string; timeout?: number }) => {
   const flashMessage = useSelector<RootState, IFlashMessage>((state) => state.flash);
