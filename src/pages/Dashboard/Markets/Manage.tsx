@@ -1,14 +1,17 @@
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import AppButton from '../../../components/AppButton';
 import AppFlash from '../../../components/AppFlash';
 import AppInput from '../../../components/AppInput';
 import AppSelect from '../../../components/AppSelect';
 import { ISelectOption } from '../../../interfaces/app-select';
-import { ICreateMarket } from '../../../interfaces/market';
+import { IFlashTypes } from '../../../interfaces/flash';
+import { ICreateMarket, MarketState } from '../../../interfaces/market';
 import { IRoute } from '../../../interfaces/route';
-import { createMarket } from '../../../store/market';
+import { RootState } from '../../../store';
+import { showFlash } from '../../../store/flash';
+import { createMarket, editMarket, getMarket } from '../../../store/market';
 
 type EventType = React.ChangeEvent<HTMLInputElement | HTMLSelectElement>;
 type ImageListProps = {
@@ -33,7 +36,7 @@ const ImageList = (props: ImageListProps) => (
   </div>
 );
 
-const AddMarket = () => {
+const ManageMarket = () => {
   const [formData, setFormData] = React.useState<ICreateMarket>({
     name: '',
     description: '',
@@ -45,6 +48,10 @@ const AddMarket = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
+  const params = useParams<{ id: string }>();
+  const market = useSelector<RootState, MarketState>((state) => state.market);
+
+  const isEdit = !!formData.id;
   const categoryOptions: ISelectOption[] = [
     {
       text: 'Please select',
@@ -81,7 +88,9 @@ const AddMarket = () => {
     event.preventDefault();
     try {
       setIsLoading(true);
-      await dispatch(createMarket(formData));
+      if (isEdit) await dispatch(editMarket(formData));
+      else await dispatch(createMarket(formData));
+      dispatch(showFlash({ type: IFlashTypes.info, messages: ['Saved successfully'] }));
       setIsLoading(false);
       history.push(IRoute.market);
     } catch (error) {
@@ -89,11 +98,23 @@ const AddMarket = () => {
     }
   };
 
+  React.useEffect(() => {
+    if (!params.id) return;
+    dispatch(getMarket(params.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if (!params.id) return;
+    setFormData(market.market);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [market]);
+
   return (
     <div className="sm:w-2/3">
       <div className="flex items-center mb-5">
         <Link to={IRoute.market} className="text-blue-600 pr-5"> &lt; Go back</Link>
-        <h1 className="text-4xl">Add Market</h1>
+        <h1 className="text-4xl">{isEdit ? 'Edit Market' : 'Add Market'}</h1>
       </div>
       <AppFlash timeout={60 * 1000} className="mb-5" />
       <form onSubmit={onSubmit}>
@@ -118,4 +139,4 @@ const AddMarket = () => {
   );
 };
 
-export default AddMarket;
+export default ManageMarket;

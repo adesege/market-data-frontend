@@ -38,7 +38,7 @@ if (getAuthToken()) {
 }
 
 const AdminDashboard = React.lazy(() => import(/* webpackChunkName: "layouts/admin-dashboard" */ './layouts/AdminDashboard'));
-const AddMarket = React.lazy(() => import(/* webpackChunkName: "pages/dashboard/markets/add" */ './pages/Dashboard/Markets/Add'));
+const ManageMarket = React.lazy(() => import(/* webpackChunkName: "pages/dashboard/markets/manage" */ './pages/Dashboard/Markets/Manage'));
 const Markets = React.lazy(() => import(/* webpackChunkName: "pages/dashboard/markets" */ './pages/Dashboard/Markets'));
 const Login = React.lazy(() => import(/* webpackChunkName: "pages/login" */ './pages/Login'));
 const Main = React.lazy(() => import(/* webpackChunkName: "pages/main" */ './pages/Main'));
@@ -62,7 +62,12 @@ const App = () => (
             <Route
               exact
               path={IRoute.addMarket}
-              render={() => <AdminDashboard component={AddMarket} />}
+              render={() => <AdminDashboard component={ManageMarket} />}
+            />
+            <Route
+              exact
+              path={IRoute.editMarket}
+              render={() => <AdminDashboard component={ManageMarket} />}
             />
             <Route
               exact

@@ -1,17 +1,13 @@
 export interface MarketState {
-  markets: ICreateMarketResponse[]
+  markets: ICreateMarket[],
+  market: ICreateMarket,
 }
 
 export interface ICreateMarket {
+  id?: string;
   name: string;
   description: string;
   category: string;
   images: string[];
   address: string;
-}
-
-export interface ICreateMarketResponse extends ICreateMarket {
-  id: string;
-  longitude: number;
-  latitude: number;
 }

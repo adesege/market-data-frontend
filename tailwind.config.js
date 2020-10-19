@@ -4,6 +4,8 @@ module.exports = {
       center: true,
       padding: '1rem',
     },
+  },
+  corePlugins: {
     tableLayout: ['responsive', 'hover', 'focus'],
   },
 };
