@@ -1,21 +1,24 @@
 import classnames from 'classnames';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IFlashMessage, IFlashTypes } from '../interfaces/flash';
-import { RootState } from '../store';
+import { AppDispatch, RootState } from '../store';
+import { removeFlash } from '../store/flash';
 
 const AppFlash = (props: { className: string; timeout?: number }) => {
   const flashMessage = useSelector<RootState, IFlashMessage>((state) => state.flash);
-
   const [isFlashVisible, setIsFlashVisible] = React.useState(true);
+  const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setIsFlashVisible(false);
+      dispatch(removeFlash());
     }, props.timeout);
 
     return () => clearTimeout(timer);
-  }, [props.timeout]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getFlashType = (type: IFlashTypes) => {
     switch (type) {

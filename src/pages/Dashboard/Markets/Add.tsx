@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import AppButton from '../../../components/AppButton';
 import AppFlash from '../../../components/AppFlash';
 import AppInput from '../../../components/AppInput';
@@ -10,7 +10,7 @@ import { ICreateMarket } from '../../../interfaces/market';
 import { IRoute } from '../../../interfaces/route';
 import { createMarket } from '../../../store/market';
 
-type EventType = React.ChangeEvent<HTMLInputElement>;
+type EventType = React.ChangeEvent<HTMLInputElement | HTMLSelectElement>;
 type ImageListProps = {
   url: string;
   index: number;
@@ -22,8 +22,12 @@ const ImageList = (props: ImageListProps) => (
     <AppInput
       type="url"
       value={props.url}
+      id={`image-${props.index}`}
       label={`Image url #${props.index + 1}`}
       containerClass="flex-1 p-1"
+      pattern="^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?"
+      placeholder="https://"
+      required
       onChange={(event: EventType) => props.onChangeImage(event, props.index)}
     />
   </div>
@@ -43,20 +47,24 @@ const AddMarket = () => {
   const history = useHistory();
   const categoryOptions: ISelectOption[] = [
     {
+      text: 'Please select',
+      value: '',
+    },
+    {
       text: 'Furniture',
-      value: 'furniture',
+      value: 'Furniture',
     },
     {
       text: 'Groceries',
-      value: 'groceries',
+      value: 'Groceries',
     },
     {
       text: 'Restaurants',
-      value: 'restaurats',
+      value: 'Restaurats',
     },
     {
       text: 'Electronics',
-      value: 'electronics',
+      value: 'Electronics',
     },
   ];
 
@@ -83,13 +91,16 @@ const AddMarket = () => {
 
   return (
     <div className="sm:w-2/3">
-      <AppFlash className="mb-5" />
-      <h1 className="text-4xl mb-5">Add Market</h1>
+      <div className="flex items-center mb-5">
+        <Link to={IRoute.market} className="text-blue-600 pr-5"> &lt; Go back</Link>
+        <h1 className="text-4xl">Add Market</h1>
+      </div>
+      <AppFlash timeout={60 * 1000} className="mb-5" />
       <form onSubmit={onSubmit}>
         <AppInput name="name" id="name" label="Name" onChange={onChange} value={formData.name} required />
         <AppInput name="description" id="description" label="Description" onChange={onChange} value={formData.description} required />
-        <AppInput name="address" id="address" label="Address" onChange={onChange} value={formData.address} required />
-        <AppSelect id="category" label="Category" options={categoryOptions} required />
+        <AppInput name="address" id="address" label="Address" placeholder="Must include city, state or country for accuracy" onChange={onChange} value={formData.address} required />
+        <AppSelect id="category" name="category" label="Category" value={formData.category} onChange={onChange} options={categoryOptions} required />
         {formData.images.map((url, index) => (
           <ImageList
             onChangeImage={onChangeImage}

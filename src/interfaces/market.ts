@@ -1,5 +1,5 @@
 export interface MarketState {
-  market: any[]
+  markets: ICreateMarketResponse[]
 }
 
 export interface ICreateMarket {
@@ -11,5 +11,7 @@ export interface ICreateMarket {
 }
 
 export interface ICreateMarketResponse extends ICreateMarket {
-
+  id: string;
+  longitude: number;
+  latitude: number;
 }
