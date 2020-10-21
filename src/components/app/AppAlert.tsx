@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import * as React from 'react';
-import { IFlashTypes } from '../interfaces/flash';
+import { IFlashTypes } from '../../interfaces/flash';
 
 const AppAlert = (props: {
   title?: string;
