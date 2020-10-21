@@ -1,5 +1,5 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { IMarketWithCoordinates } from '../interfaces/market';
 
 interface SearchState {
@@ -21,8 +21,16 @@ const { setResults } = searchSlice.actions;
 export const searchMarket = (params: any) => async (
   dispatch: Dispatch<PayloadAction<IMarketWithCoordinates[]>>,
 ) => {
-  const { data } = await axios.get<IMarketWithCoordinates[]>('/search', { params });
-  dispatch(setResults(data));
+  try {
+    const { data } = await axios.get<IMarketWithCoordinates[]>('/search', { params });
+    dispatch(setResults(data));
+  } catch (error) {
+    const exception: AxiosError = error;
+    if (exception.response.status === 404) {
+      dispatch(setResults([]));
+    }
+    throw error;
+  }
 };
 
 export default searchSlice.reducer;
