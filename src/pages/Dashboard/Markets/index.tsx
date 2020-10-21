@@ -80,7 +80,7 @@ const Markets = () => {
       {showDeleteAlert
         && (
           <DeleteAlert
-            market={selectedMarket}
+            market={{ ...selectedMarket }}
             onToggleDeleteMessage={onToggleDeleteMessage}
           />
         )}
