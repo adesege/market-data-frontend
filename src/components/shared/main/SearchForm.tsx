@@ -53,10 +53,10 @@ const SearchForm = (props: { children: (props: ISearchFormChildrenProps) => void
   React.useEffect(
     () => props.children({
       ...myCoordinates,
-      isNearMe: formData.isNearMe,
+      isSearching,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [myCoordinates, formData.isNearMe],
+    [myCoordinates, formData.isNearMe, isSearching],
   );
 
   return (

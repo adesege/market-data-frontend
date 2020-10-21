@@ -8,7 +8,7 @@ const Main = () => {
   const [searchFormProps, setSearchFormProps] = React.useState<ISearchFormChildrenProps>({
     latitude: 0,
     longitude: 0,
-    isNearMe: false,
+    isSearching: false,
   });
 
   return (

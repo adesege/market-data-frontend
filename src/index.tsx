@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import './assets/css/app.css';
 import './assets/css/styles.scss';
+import AppLoader from './components/app/AppLoader';
 import { AUTH_USER_PAYLOAD_KEY } from './constants';
 import { IFlashTypes } from './interfaces/flash';
 import { IRoute } from './interfaces/route';
@@ -48,7 +49,7 @@ const App = () => (
   <React.StrictMode>
     <Provider store={store}>
       <Router>
-        <React.Suspense fallback={<div>Loading...</div>}>
+        <React.Suspense fallback={<div className="flex items-center h-full"><AppLoader /></div>}>
           <Switch>
             <Route
               exact

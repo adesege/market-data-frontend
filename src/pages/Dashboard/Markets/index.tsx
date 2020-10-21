@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 import AppAlert from '../../../components/app/AppAlert';
 import AppButton from '../../../components/app/AppButton';
 import AppFlash from '../../../components/app/AppFlash';
+import AppLoader from '../../../components/app/AppLoader';
 import { IFlashTypes } from '../../../interfaces/flash';
-import { ICreateMarket, MarketState } from '../../../interfaces/market';
+import { ICreateMarket } from '../../../interfaces/market';
 import { IRoute } from '../../../interfaces/route';
 import { AppDispatch, RootState } from '../../../store';
 import { deleteMarket, getMarkets } from '../../../store/market';
@@ -54,7 +55,9 @@ const DeleteAlert = (props: IDeleteAlertProps) => {
 const Markets = () => {
   const [showDeleteAlert, setShowDeleteAlert] = React.useState(false);
   const [selectedMarket, setSelectedMarket] = React.useState<ICreateMarket>();
-  const marketsState = useSelector<RootState, MarketState>((state) => state.market);
+  const [isLoadingMarkets, setIsLoadingMarkets] = React.useState(true);
+
+  const markets = useSelector<RootState, ICreateMarket[]>((state) => state.market.markets);
   const dispatch = useDispatch<AppDispatch>();
 
   const onToggleDeleteMessage = (market: ICreateMarket, state: boolean): void => {
@@ -63,7 +66,7 @@ const Markets = () => {
   };
 
   React.useEffect(() => {
-    dispatch(getMarkets());
+    dispatch(getMarkets()).finally(() => setIsLoadingMarkets(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -81,47 +84,51 @@ const Markets = () => {
             onToggleDeleteMessage={onToggleDeleteMessage}
           />
         )}
-
-      <table className="table-fixed">
-        <thead>
-          <tr>
-            <th className="w-1/3 px-4 py-2">Name</th>
-            <th className="px-4 py-2">Category</th>
-            <th className="px-4 py-2">Address</th>
-            <th className="w-1/6 px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {!marketsState.markets.length
-            ? (
+      {isLoadingMarkets
+        ? <AppLoader />
+        : (
+          <table className="table-fixed">
+            <thead>
               <tr>
-                <td colSpan={4}>
-                  <AppAlert
-                    className="text-center"
-                    messages={['You haven\'t created any market yet']}
-                    type={IFlashTypes.info}
-                  />
-                </td>
+                <th className="w-1/3 px-4 py-2">Name</th>
+                <th className="px-4 py-2">Category</th>
+                <th className="px-4 py-2">Address</th>
+                <th className="w-1/6 px-4 py-2">Actions</th>
               </tr>
-            )
-            : marketsState.markets.map((market, index) => (
-              <tr key={market.id} className={(index + 1) % 2 === 0 ? 'bg-gray-100' : ''}>
-                <td className="border px-4 py-2">{market.name}</td>
-                <td className="border px-4 py-2">{market.category}</td>
-                <td className="border px-4 py-2">{market.address}</td>
-                <td className="border px-4 py-2">
-                  <Link
-                    to={`${IRoute.market}/${market.id}`}
-                    className="bg-blue-600 text-white py-1 px-2 rounded inline-block mr-1"
-                  >
-                    Edit
-                  </Link>
-                  <AppButton className="bg-red-700 text-white  py-1 px-2 h-auto" onClick={() => onToggleDeleteMessage(market, true)}>Delete</AppButton>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+
+              {!markets.length
+                && (
+                  <tr>
+                    <td colSpan={4}>
+                      <AppAlert
+                        className="text-center"
+                        messages={['You haven\'t created any market yet']}
+                        type={IFlashTypes.info}
+                      />
+                    </td>
+                  </tr>
+                )}
+              {!isLoadingMarkets && !!markets.length && markets.map((market, index) => (
+                <tr key={market.id} className={(index + 1) % 2 === 0 ? 'bg-gray-100' : ''}>
+                  <td className="border px-4 py-2">{market.name}</td>
+                  <td className="border px-4 py-2">{market.category}</td>
+                  <td className="border px-4 py-2">{market.address}</td>
+                  <td className="border px-4 py-2">
+                    <Link
+                      to={`${IRoute.market}/${market.id}`}
+                      className="bg-blue-600 text-white py-1 px-2 rounded inline-block mr-1"
+                    >
+                      Edit
+                    </Link>
+                    <AppButton className="bg-red-700 text-white  py-1 px-2 h-auto" onClick={() => onToggleDeleteMessage(market, true)}>Delete</AppButton>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
     </section>
   );
 };
