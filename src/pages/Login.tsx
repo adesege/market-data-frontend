@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import AppButton from '../components/AppButton';
-import AppFlash from '../components/AppFlash';
-import AppInput from '../components/AppInput';
+import AppButton from '../components/app/AppButton';
+import AppFlash from '../components/app/AppFlash';
+import AppInput from '../components/app/AppInput';
 import { AuthState, ILoginState } from '../interfaces/auth';
 import { IRoute } from '../interfaces/route';
 import { AppDispatch, RootState } from '../store';

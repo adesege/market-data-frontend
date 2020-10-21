@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
 const dotenv = require('dotenv').config();
@@ -41,7 +42,7 @@ module.exports = {
       }],
   },
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: path.join(__dirname, 'src/static'),
     compress: true,
     port: 9000,
     historyApiFallback: true,
@@ -63,7 +64,13 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: isDev ? '[name].css' : '[name].[contenthash].css',
       chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
-    })],
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: path.join(__dirname, 'src/static'), to: path.join(__dirname, 'dist') },
+      ],
+    }),
+  ],
   optimization: {
     runtimeChunk: 'single',
     moduleIds: 'deterministic',

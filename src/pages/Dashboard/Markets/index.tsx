@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import AppAlert from '../../../components/AppAlert';
-import AppButton from '../../../components/AppButton';
-import AppFlash from '../../../components/AppFlash';
+import AppAlert from '../../../components/app/AppAlert';
+import AppButton from '../../../components/app/AppButton';
+import AppFlash from '../../../components/app/AppFlash';
 import { IFlashTypes } from '../../../interfaces/flash';
 import { ICreateMarket, MarketState } from '../../../interfaces/market';
 import { IRoute } from '../../../interfaces/route';

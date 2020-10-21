@@ -1,0 +1,42 @@
+.carousel {
+
+  &__items {
+    display: flex;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    margin: auto;
+    scroll-padding: 0 10px;
+    scrollbar-width: none;
+    overflow-x: auto;
+    }
+  &__item {
+      scroll-snap-align: center;
+    }
+
+    &__navigation {
+          width: 24px;
+    height: 24px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+
+    &--next {
+      right: 10px;
+    }
+
+    &--previous {
+    left: 10px;
+    }
+
+    &--icon {
+          border-radius: 50%;
+    background: white;
+    cursor: pointer;
+
+    path {
+      fill: gray;
+    }
+    }
+    }
+}
+

@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import AppButton from '../../../components/AppButton';
-import AppFlash from '../../../components/AppFlash';
-import AppInput from '../../../components/AppInput';
-import AppSelect from '../../../components/AppSelect';
-import { ISelectOption } from '../../../interfaces/app-select';
+import AppButton from '../../../components/app/AppButton';
+import AppFlash from '../../../components/app/AppFlash';
+import AppInput from '../../../components/app/AppInput';
+import AppSelect from '../../../components/app/AppSelect';
 import { IFlashTypes } from '../../../interfaces/flash';
 import { ICreateMarket, MarketState } from '../../../interfaces/market';
 import { IRoute } from '../../../interfaces/route';
 import { AppDispatch, RootState } from '../../../store';
 import { showFlash } from '../../../store/flash';
 import { createMarket, editMarket, getMarket } from '../../../store/market';
+import { getCategoryOptions } from '../../../utils';
 
 type EventType = React.ChangeEvent<HTMLInputElement | HTMLSelectElement>;
 type ImageListProps = {
@@ -52,28 +52,6 @@ const ManageMarket = () => {
   const market = useSelector<RootState, MarketState>((state) => state.market);
 
   const isEdit = !!formData.id;
-  const categoryOptions: ISelectOption[] = [
-    {
-      text: 'Please select',
-      value: '',
-    },
-    {
-      text: 'Furniture',
-      value: 'Furniture',
-    },
-    {
-      text: 'Groceries',
-      value: 'Groceries',
-    },
-    {
-      text: 'Restaurants',
-      value: 'Restaurats',
-    },
-    {
-      text: 'Electronics',
-      value: 'Electronics',
-    },
-  ];
 
   const onChange = (event: EventType) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -121,7 +99,7 @@ const ManageMarket = () => {
         <AppInput name="name" id="name" label="Name" onChange={onChange} value={formData.name} required />
         <AppInput name="description" id="description" label="Description" onChange={onChange} value={formData.description} required />
         <AppInput name="address" id="address" label="Address" placeholder="Must include city, state or country for accuracy" onChange={onChange} value={formData.address} required />
-        <AppSelect id="category" name="category" label="Category" value={formData.category} onChange={onChange} options={categoryOptions} required />
+        <AppSelect id="category" name="category" label="Category" value={formData.category} onChange={onChange} options={getCategoryOptions()} required />
         {formData.images.map((url, index) => (
           <ImageList
             onChangeImage={onChangeImage}

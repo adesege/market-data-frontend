@@ -23,7 +23,7 @@ const AdminDashboard = (props: { component: React.FC<AuthState> }) => {
     return <Redirect to={IRoute.main} />;
   }
 
-  return <DefaultLayout component={props.component} />;
+  return <DefaultLayout component={props.component} mainClassName="container px-4" />;
 };
 
 export default AdminDashboard;

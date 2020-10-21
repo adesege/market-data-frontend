@@ -11,3 +11,8 @@ export interface ICreateMarket {
   images: string[];
   address: string;
 }
+
+export interface IMarketWithCoordinates extends ICreateMarket {
+  longitude: number;
+  latitude: number;
+}

@@ -7,10 +7,11 @@ export interface ISelectOption {
 
 export interface IAppSelectProps {
   id: string;
-  label: string;
+  label?: string;
   required: boolean,
   options: ISelectOption[];
   name: string;
   value: string;
+  containerClassName?: string;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
 }

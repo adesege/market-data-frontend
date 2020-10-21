@@ -33,7 +33,7 @@ const NavBar = () => {
       <nav className="flex">
         {navLinks
           .filter((link) => link.isVisible)
-          .map((link) => <Link to={link.to} className="inline-block hover:text-blue-500 ml-5">{link.title}</Link>)}
+          .map((link) => <Link key={link.title} to={link.to} className="inline-block hover:text-blue-500 ml-5">{link.title}</Link>)}
       </nav>
     </header>
   );
