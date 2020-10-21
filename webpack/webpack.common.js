@@ -13,6 +13,18 @@ const isBuildAnalyzer = process.env.BUILD_ANALYZER === '1';
 const rootDir = path.join(__dirname, '../');
 
 const plugins = [
+  new MiniCssExtractPlugin({
+    filename: isDev ? '[name].css' : '[name].[contenthash].css',
+    chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
+  }),
+  new webpack.DefinePlugin({
+    'process.env': JSON.stringify(dotenv.parsed || process.env),
+  }),
+  new CopyPlugin({
+    patterns: [
+      { from: './src/static' },
+    ],
+  }),
   new HtmlWebPackPlugin({
     template: './public/index.html',
     filename: './index.html',
@@ -30,19 +42,6 @@ const plugins = [
       minifyCSS: !isDev,
       minifyURLs: !isDev,
     },
-
-  }),
-  new webpack.DefinePlugin({
-    'process.env': JSON.stringify(dotenv.parsed || process.env),
-  }),
-  new MiniCssExtractPlugin({
-    filename: isDev ? '[name].css' : '[name].[contenthash].css',
-    chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
-  }),
-  new CopyPlugin({
-    patterns: [
-      { from: './src/static' },
-    ],
   }),
 ];
 if (isBuildAnalyzer) plugins.push(new BundleAnalyzerPlugin());
@@ -82,7 +81,6 @@ module.exports = {
           isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader',
-          'sass-loader',
         ],
       }],
   },
