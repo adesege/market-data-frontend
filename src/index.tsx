@@ -13,6 +13,7 @@ import AppLoader from './components/app/AppLoader';
 import { AUTH_USER_PAYLOAD_KEY } from './constants';
 import { IFlashTypes } from './interfaces/flash';
 import { IRoute } from './interfaces/route';
+import Logout from './pages/Logout';
 import store from './store';
 import { logout, setCurrentUser } from './store/auth';
 import { showFlash } from './store/flash';
@@ -60,6 +61,11 @@ const App = () => (
               exact
               path={IRoute.login}
               component={Login}
+            />
+            <Route
+              exact
+              path={IRoute.logout}
+              component={Logout}
             />
             <Route
               exact

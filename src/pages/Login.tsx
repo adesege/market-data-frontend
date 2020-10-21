@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import AppButton from '../components/app/AppButton';
 import AppFlash from '../components/app/AppFlash';
 import AppInput from '../components/app/AppInput';
@@ -47,6 +47,7 @@ const Login = () => {
             Login
           </AppButton>
         </form>
+        <Link to="/" className="text-blue-700 inline-block mt-10">Go to homepage</Link>
       </div>
     </div>
   );

@@ -25,6 +25,11 @@ const NavBar = () => {
       to: IRoute.market,
       isVisible: isAdmin,
     },
+    {
+      title: 'Logout',
+      to: IRoute.logout,
+      isVisible: authState.isAuthenticated,
+    },
   ];
 
   return (

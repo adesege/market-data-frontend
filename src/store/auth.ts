@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { AuthState, ILoginState, ISetCurrentUser } from 'interfaces/auth';
 import { Dispatch } from 'react';
 import { AUTH_TOKEN_KEY, AUTH_USER_PAYLOAD_KEY } from '../constants';
+import { AuthState, ILoginState, ISetCurrentUser } from '../interfaces/auth';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 
 const authSlice = createSlice({
@@ -10,8 +10,10 @@ const authSlice = createSlice({
   initialState: { user: { roles: [] }, isAuthenticated: false } as AuthState,
   reducers: {
     setCurrentUser(state: AuthState, action: PayloadAction<ISetCurrentUser>) {
-      state.user = action.payload.user;
-      state.isAuthenticated = !!Object.keys(action.payload.user).length;
+      const { user } = action.payload;
+
+      state.user = user;
+      state.isAuthenticated = user === null ? false : !!Object.keys(user).length;
     },
   },
 });
@@ -29,7 +31,8 @@ export const login = (formData: ILoginState) => async (
 };
 
 export const logout = () => (dispatch: Dispatch<PayloadAction<ISetCurrentUser>>) => {
-  localStorage.clear();
+  localStorage.removeItem(AUTH_TOKEN_KEY);
+  localStorage.removeItem(AUTH_USER_PAYLOAD_KEY);
   setAuthorizationToken('');
   return dispatch(setCurrentUser({ user: null }));
 };
