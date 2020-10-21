@@ -56,6 +56,7 @@
     "postcss": "^8.1.2",
     "postcss-import": "^13.0.0",
     "postcss-loader": "^4.0.4",
+    "postcss-nested": "^5.0.1",
     "postcss-preset-env": "^6.7.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",

@@ -1,5 +1,4 @@
 .carousel {
-
   &__items {
     display: flex;
     scroll-snap-type: x mandatory;
@@ -9,6 +8,7 @@
     scrollbar-width: none;
     overflow-x: auto;
     }
+    
   &__item {
       scroll-snap-align: center;
     }

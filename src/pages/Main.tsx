@@ -1,5 +1,4 @@
 import * as React from 'react';
-import '../assets/css/main.scss';
 import SearchForm from '../components/shared/main/SearchForm';
 import SearchResultCard from '../components/shared/main/SearchResultCard';
 import { ISearchFormChildrenProps } from '../interfaces/search-form';
