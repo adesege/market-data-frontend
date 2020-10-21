@@ -21,8 +21,7 @@
   },
   "include": [
     "src/**/*.tsx",
-    "*.ts",
-    "webpack.config.productionn.js"
+    "*.ts"
   ],
   "exclude": [
     "node_modules",

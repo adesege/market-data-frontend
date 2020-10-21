@@ -1,14 +1,64 @@
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 const path = require('path');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+const dotenv = require('dotenv').config();
+
+const isDev = process.env.NODE_ENV !== 'production';
+const isBuildAnalyzer = process.env.BUILD_ANALYZER === '1';
+const rootDir = path.join(__dirname, '../');
+
+const plugins = [
+  new HtmlWebPackPlugin({
+    template: './public/index.html',
+    filename: './index.html',
+    hash: true,
+    inject: true,
+    minify: {
+      removeComments: !isDev,
+      collapseWhitespace: !isDev,
+      removeRedundantAttributes: !isDev,
+      useShortDoctype: !isDev,
+      removeEmptyAttributes: !isDev,
+      removeStyleLinkTypeAttributes: !isDev,
+      keepClosingSlash: !isDev,
+      minifyJS: !isDev,
+      minifyCSS: !isDev,
+      minifyURLs: !isDev,
+    },
+
+  }),
+  new webpack.DefinePlugin({
+    'process.env': JSON.stringify(dotenv.parsed),
+  }),
+  new MiniCssExtractPlugin({
+    filename: isDev ? '[name].css' : '[name].[contenthash].css',
+    chunkFilename: isDev ? '[id].css' : '[id].[contenthash].css',
+  }),
+  new CopyPlugin({
+    patterns: [
+      { from: './src/static' },
+    ],
+  }),
+];
+if (isBuildAnalyzer) plugins.push(new BundleAnalyzerPlugin());
 
 module.exports = {
-  context: process.cwd(),
+  context: rootDir,
   entry: './src/index.tsx',
   devtool: 'inline-source-map',
+  output: {
+    filename: 'app/[name].[contenthash].js',
+    path: path.join(rootDir, './dist'),
+    publicPath: '/',
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
   module: {
     rules: [
       {
@@ -29,50 +79,14 @@ module.exports = {
       {
         test: /\.s?css$/i,
         use: [
-          MiniCssExtractPlugin.loader,
+          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
           'css-loader',
           'postcss-loader',
           'sass-loader',
         ],
       }],
   },
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
-    port: 9000,
-  },
-  plugins: [
-    new HtmlWebPackPlugin({
-      template: './public/index.html',
-      filename: './index.html',
-      hash: true,
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
-    }),
-    new ForkTsCheckerWebpackPlugin({
-      async: false,
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css',
-      chunkFilename: '[id].[contenthash].css',
-    }),
-    new CopyPlugin({
-      patterns: [
-        { from: path.join(__dirname, 'src/static'), to: path.join(__dirname, 'dist') },
-      ],
-    }),
-  ],
+  plugins,
   optimization: {
     runtimeChunk: 'single',
     moduleIds: 'deterministic',
@@ -101,12 +115,5 @@ module.exports = {
       },
     },
   },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-  },
-  output: {
-    filename: '[name].[contenthash].js',
-    path: path.resolve(process.cwd(), 'dist'),
-    publicPath: '/',
-  },
+
 };
