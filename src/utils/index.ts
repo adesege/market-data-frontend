@@ -8,19 +8,19 @@ export const getCategoryOptions = (): ISelectOption[] => [
     value: '',
   },
   {
-    text: 'Furniture',
-    value: 'Furniture',
+    text: 'Fruit',
+    value: 'Fruit',
   },
   {
-    text: 'Groceries',
-    value: 'Groceries',
+    text: 'Vegetables',
+    value: 'Vegetables',
   },
   {
-    text: 'Restaurants',
-    value: 'Restaurants',
+    text: 'Cereal',
+    value: 'Cereal',
   },
   {
-    text: 'Electronics',
-    value: 'Electronics',
+    text: 'Fats',
+    value: 'Fats',
   },
 ];
