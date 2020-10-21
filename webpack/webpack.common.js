@@ -33,7 +33,7 @@ const plugins = [
 
   }),
   new webpack.DefinePlugin({
-    'process.env': JSON.stringify(dotenv.parsed),
+    'process.env': JSON.stringify(dotenv.parsed || process.env),
   }),
   new MiniCssExtractPlugin({
     filename: isDev ? '[name].css' : '[name].[contenthash].css',
